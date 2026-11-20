@@ -36,14 +36,9 @@ If AirportBrcmFixup is needed, add Lilu, AirportBrcmFixup and AirPortBrcmNIC_Inj
 
 `sbcmdelay=X`: load embedded drivers `X` milliseconds after service startup; `sbcmdelay=10000` means 10 seconds. Supports all three systems. Omit it or use `0` for no delay. Payload preparation and registration still run early.
 
-The following features are disabled by default and apply only to macOS Tahoe (Darwin 25). They can be enabled independently:
+This HONOR BCM4352 build includes PCI configuration recovery on exit from D3. After a successful driver start, `PCIRecoveryState=Armed` in IORegistry indicates that the driver saved a configuration snapshot.
 
-| Argument | Feature |
-| --- | --- |
-| `-sbcmawdlcc` | Enable the AWDL channel coexistence fix |
-| `-sbcmdma` | Enable Tahoe DMA optimization |
-
-Append the desired arguments to OpenCore's `NVRAM → Add → 7C436110-AB2A-4BBB-A880-FE41995C9F82 → boot-args`, preserving existing arguments and separating them with spaces, then reboot. Remove the corresponding argument and reboot to disable a feature. Debug and Release use the same defaults; neither modification applies to Sonoma or Sequoia. `-simplebcmoff` still disables the entire driver.
+On macOS Tahoe, AWDL channel coexistence and DMA optimization are enabled by default in this build. Use `-sbcmawdlccoff` or `-sbcmdmaoff` to disable either feature individually for a subsequent boot. Removing the respective flag restores the default. Sonoma and Sequoia skip these two optimizations. `-simplebcmoff` disables the entire driver.
 
 ## Debugging
 

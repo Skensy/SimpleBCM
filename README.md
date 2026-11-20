@@ -36,14 +36,9 @@ SimpleBCM 通过 OpenCore 注入恢复 macOS Sonoma、Sequoia 和 Tahoe 的 Broa
 
 `sbcmdelay=X`：服务启动后延迟 `X` 毫秒加载内嵌驱动，如 `sbcmdelay=10000` 为 10 秒。支持三套系统，不设置或设为 `0` 时不延迟。载荷准备和注册仍在早期完成。
 
-以下功能默认关闭，仅在 macOS Tahoe（Darwin 25）生效，可分别启用：
+此 HONOR BCM4352 构建包含从 D3 状态退出时的 PCI 配置恢复。驱动成功启动后，IORegistry 中的 `PCIRecoveryState=Armed` 表示已保存配置快照。
 
-| 参数 | 功能 |
-| --- | --- |
-| `-sbcmawdlcc` | 启用 AWDL 信道共存修正 |
-| `-sbcmdma` | 启用 Tahoe DMA 优化 |
-
-在 OpenCore 的 `NVRAM → Add → 7C436110-AB2A-4BBB-A880-FE41995C9F82 → boot-args` 中追加所需参数，保留原有参数并用空格分隔；重启后生效。移除对应参数并重启即可关闭。两项互不依赖，Debug 和 Release 的默认行为相同；Sonoma、Sequoia 不应用这两项修改。`-simplebcmoff` 仍可禁用整个驱动。
+本构建在 macOS Tahoe 上默认启用 AWDL 信道共存修正和 DMA 优化。可分别添加 `-sbcmawdlccoff` 或 `-sbcmdmaoff` 并重启以关闭对应功能。移除该参数并重启即可恢复默认状态。Sonoma 和 Sequoia 跳过这两项优化。`-simplebcmoff` 可禁用整个驱动。
 
 ## 调试
 
